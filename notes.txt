@@ -1,0 +1,154 @@
+---> Express Js :- It is a web application framework for Node.js. It provides various features that make web application debelopment fast and easy .With the help of it we can develop our application very and easly and fastly.
+    -> Advantages 
+       -> It is Javascript development so fast and easy.
+       -> Easy to configure and customize 
+       -> We work on middlewares so the application work is easy 
+       -> It is easy to integrate with different template engines like Jade , EJS , Pug etc. 
+       -> Allow us to create REST API server.
+       -> It is easy to connect with databases like MongoDB , MySql, Redis etc.
+
+    -> Environmental Setup 
+       -> First we need node js environment 
+       -> npm init (package.json)
+       -> npm install express --save
+
+    --> How we create web server 
+      App.js 
+       const express=require('express');//import express 
+       const PORT=8899;//define port
+       const app=express();//create object of express
+
+       //define app in the port
+       app.listen(PORT,(err)=>{
+           if(err) throw err;
+           console.log(`Work on ${PORT}`);
+       })
+    --> configuring routes (routing)
+    Routing refers to determining how an application responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).
+      syntex :
+      app.METHOD(PATH,HANDLER)
+        -> app : instance of express 
+        -> METHOD : Http request methods (GET ,POST , PUT ,DELETE)
+        -> PATH : URI 
+        -> HANDLER :- function executed when path is match 
+        eg:
+          app.get("/",(req,res)=>{
+              res.send("Default")
+          })
+          app.post('/submit-data',(req,res)=>{
+              res.send("Post Request")
+          })
+           app.put('/update-data',(req,res)=>{
+              res.send("Put Request")
+          })
+           app.delete('/delete-data',(req,res)=>{
+              res.send("Delete Request")
+          })
+          -> How we read post data 
+            app.use(express.json());
+           req.body
+         -> dynamic routes (parameters - params)
+           eh:
+             http://localhost:8899/category/mobiles
+              app.get("/categorydata/:cname/:scat",(req,res)=>{
+                  //read param value
+                  let cn=req.params.cname;
+                   let scn=req.params.scat;
+                  res.send(`The category is ${cn} and subcat is ${scn}`)
+              })
+              -> express js middleware 
+                Middleware are the functions that execute during the lifecycle of a request to the server.
+                -> Each middleware has access to the HTTP request and response for each route (path).
+                -> Types of middleware 
+                   1. Custom Middleware 
+                   2. Inbuild Middleware 
+                   3. 3rd party middleware 
+                -> Custom Middleware
+                   -> globel 
+                   let myData=(req,res,next)=>{
+                       req.mytitle="NeoSoft Technology";
+                       next();
+                   } 
+                   -> To use any middlware we have .use()
+                   eg:
+                       app.use(myData());
+                  -> route level middleware 
+
+                  const JsonCheck=function(){
+                    return (req,res,next){
+                       if(req.headers['type']==='application/json')
+                       {
+                         next();
+                       }
+                       else {
+                         res.status(201).send('Application/json formet supported);
+                       }
+                    }
+                  }
+                  app.post("/regester",JsonCheck(),(req,res)=>{
+
+                  })
+                  -> Inbuild Middleware 
+                     -> express.static:- to serve a static file 
+                     -> express.json()
+                     -> express.Router() :- to seperate routes 
+
+                 -> express.static :- this middleware is used to allow static files like images, css , js etc.
+
+                  app.use(express.static('images'));
+                -> express.Router :- It is a inbuild middleware used to create seperate route handlers.
+
+                routes/adminRoutes.js 
+                const express=require('express');
+const router=express.Router();
+router.get("/",(req,res)=>{
+    res.send("Admin Front");
+})
+router.get("/dashboard",(req,res)=>{
+    res.send("Admin dashbord");
+})
+module.exports=router;
+
+App.js 
+const frontRoutes=require('./routes/frontRoutes');
+const adminRoutes=require('./routes/adminRoutes');
+app.use("/",frontRoutes)
+app.use("/admin",adminRoutes);
+--> APi testing 
+  postman 
+--> 3 rd party middleware (are install with the help of npm install)
+  cors :- cross orgin request 
+    npm install cors --save 
+  multer :- for fileupload 
+    nom install multer --save 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
